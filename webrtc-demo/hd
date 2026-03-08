@@ -1,0 +1,5 @@
+webrtc-demo/
+│
+├── index.html        (Página que captura la cámara)
+├── receptor.html     (Página que recibe la transmisión)
+├── server.js         (Servidor de señalización con Node.js)

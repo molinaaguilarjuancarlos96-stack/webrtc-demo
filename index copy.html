@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambiar vista de cámara</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        video {
+            width: 80%;
+            max-width: 600px;
+            border: 3px solid #333;
+            border-radius: 10px;
+            background-color: black;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Vista de cámara</h1>
+    <video id="video" autoplay playsinline></video>
+    <br>
+    <button id="btnFrontal">Cámara frontal</button>
+    <button id="btnTrasera">Cámara trasera</button>
+    <button id="btnDetener">Detener cámara</button>
+
+    <script>
+        const video = document.getElementById('video');
+        const btnFrontal = document.getElementById('btnFrontal');
+        const btnTrasera = document.getElementById('btnTrasera');
+        const btnDetener = document.getElementById('btnDetener');
+        let stream;
+
+        async function iniciarCamara(facingMode) {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: facingMode }
+                });
+                video.srcObject = stream;
+            } catch (error) {
+                alert("No se pudo acceder a la cámara: " + error);
+            }
+        }
+
+        btnFrontal.addEventListener('click', () => iniciarCamara("user"));
+        btnTrasera.addEventListener('click', () => iniciarCamara("environment"));
+        btnDetener.addEventListener('click', () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                video.srcObject = null;
+            }
+        });
+    </script>
+
+</body>
+</html>
